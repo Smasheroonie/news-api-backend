@@ -7,7 +7,7 @@
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed": "node ./db/seeds/run-seed.js",
     "test": "jest",
-    "scratch": "psql -f db/scratch.sql > db/scratch.txt",
+    "scratch": "psql -f db/my-scratch.sql > db/my-scratch.txt",
     "prepare": "husky install"
   },
   "repository": {
@@ -25,6 +25,7 @@
     "husky": "^8.0.2",
     "jest": "^27.5.1",
     "jest-extended": "^2.0.0",
+    "jest-sorted": "^1.0.15",
     "pg-format": "^1.0.4",
     "supertest": "^7.0.0"
   },
@@ -35,7 +36,8 @@
   },
   "jest": {
     "setupFilesAfterEnv": [
-      "jest-extended/all"
+      "jest-extended/all",
+      "jest-sorted"
     ]
   }
 }
