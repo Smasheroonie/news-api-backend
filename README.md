@@ -1,8 +1,16 @@
 # Northcoders News API
 
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
+Welcome to my News API Back End project!
 
+To setup, please do the following:
 
+Create two new files called .env.test and .env.development in the root folder of the project.
+
+Open your terminal and run the following commands:
+
+```
+npm install
+```
 
 --- 
 
