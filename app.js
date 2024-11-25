@@ -1,14 +1,21 @@
 const express = require("express");
 const app = express();
-const endpointsJson = require("./endpoints.json");
-const { handleServerError } = require("./controllers/errors-controller");
-const { getTopics } = require("./controllers/topics-controller");
 
-app.get("/api", (req, res) => {
-  res.status(200).send({ endpoints: endpointsJson });
-});
+const { getEndpoints } = require("./controllers/endpoints-controller");
+const { getTopics } = require("./controllers/topics-controller");
+const {
+  handleServerError,
+  handleBadRequest,
+} = require("./controllers/errors-controller");
+const { getArticleById } = require("./controllers/articles-controller");
+
+app.get("/api", getEndpoints);
 
 app.get("/api/topics", getTopics);
+
+app.get("/api/articles/:article_id", getArticleById);
+
+app.use(handleBadRequest);
 
 app.use(handleServerError);
 
