@@ -9,18 +9,11 @@ exports.selectComments = (article_id) => {
   });
 };
 
-exports.postComment = ( username, body, article_id) => {
-  if (!username && !body) {
+exports.postComment = (username, body, article_id) => {
+  if (!username || !body || typeof username !== "string" || typeof body !== "string") {
     return Promise.reject({
       status: 400,
       msg: "Bad request",
-    });
-  }
-
-  if (!body.length || !username.length) {
-    return Promise.reject({
-      status: 400,
-      msg: "Please enter a comment before posting",
     });
   }
 

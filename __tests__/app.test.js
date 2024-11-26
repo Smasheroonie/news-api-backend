@@ -71,7 +71,7 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/99999999")
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("No article for id: 99999999");
+        expect(msg).toBe("Article not found");
       });
   });
 
@@ -161,7 +161,7 @@ describe("GET /api/articles/:article_id/comments", () => {
       .get("/api/articles/99999999/comments")
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("No article for id: 99999999");
+        expect(msg).toBe("Article not found");
       });
   });
 
@@ -209,7 +209,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       .send(newComment)
       .expect(400)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("Please enter a comment before posting");
+        expect(msg).toBe("Bad request");
       });
   });
 
@@ -224,7 +224,37 @@ describe("POST /api/articles/:article_id/comments", () => {
       .send(newComment)
       .expect(400)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("Please enter a comment before posting");
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  test("400: Responds with error message if comment is not a string", () => {
+    const newComment = {
+      username: "rogersop",
+      body: 12,
+    };
+
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  test("400: Responds with error message if username is not a string", () => {
+    const newComment = {
+      username: 32,
+      body: "hi!",
+    };
+
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
       });
   });
 
@@ -265,7 +295,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       .send(newComment)
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("Not found");
+        expect(msg).toBe("Article not found");
       });
   });
 
@@ -280,6 +310,100 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect(400)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad request");
+      });
+  });
+});
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("200: Responds with updated article when votes increased", () => {
+    const update = { inc_votes: 1 };
+
+    return request(app)
+      .patch("/api/articles/11")
+      .send(update)
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article).toMatchObject({
+          author: "icellusedkars",
+          title: "Am I a cat?",
+          article_id: 11,
+          topic: "mitch",
+          created_at: "2020-01-15T22:21:00.000Z",
+          votes: 1,
+          article_img_url:
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+          body: "Having run out of ideas for articles, I am staring at the wall blankly, like a cat. Does this make me a cat?",
+        });
+      });
+  });
+
+  test("200: Responds with updated article when votes decreased", () => {
+    const update = { inc_votes: -10 };
+
+    return request(app)
+      .patch("/api/articles/1")
+      .send(update)
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article).toMatchObject({
+          author: "butter_bridge",
+          title: "Living in the shadow of a great man",
+          article_id: 1,
+          topic: "mitch",
+          created_at: "2020-07-09T20:11:00.000Z",
+          votes: 90,
+          article_img_url:
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+          body: "I find this existence challenging",
+        });
+      });
+  });
+
+  test("400: Responds with error message when given empty object", () => {
+    const update = {};
+
+    return request(app)
+      .patch("/api/articles/1")
+      .send(update)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  test("400: Responds with error message when inc_votes is not a number", () => {
+    const update = { inc_votes: "5" };
+
+    return request(app)
+      .patch("/api/articles/1")
+      .send(update)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  test("400: Responds with error message when article type is not valid", () => {
+    const update = { inc_votes: 1 };
+
+    return request(app)
+      .patch("/api/articles/dogs")
+      .send(update)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  test("404: Responds with error message when article does not exist", () => {
+    const update = { inc_votes: 1 };
+
+    return request(app)
+      .patch("/api/articles/900")
+      .send(update)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Article not found");
       });
   });
 });

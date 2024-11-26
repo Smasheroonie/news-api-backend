@@ -17,8 +17,13 @@ exports.addComment = (req, res, next) => {
   const { username, body } = req.body;
   const { article_id } = req.params;
 
-  postComment(username, body, article_id)
-    .then((comment) => {
+  const promises = [
+    checkArticleExists(article_id),
+    postComment(username, body, article_id),
+  ];
+
+  Promise.all(promises)
+    .then(([_, comment]) => {
       res.status(201).send(comment);
     })
     .catch(next);

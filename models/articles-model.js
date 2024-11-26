@@ -7,7 +7,7 @@ exports.checkArticleExists = (article_id) => {
     if (!rows.length) {
       return Promise.reject({
         status: 404,
-        msg: `No article for id: ${article_id}`,
+        msg: `Article not found`,
       });
     }
   });
@@ -45,5 +45,20 @@ exports.selectArticleById = (article_id) => {
   return db.query(queryStr, [article_id]).then(({ rows }) => {
     const article = rows[0];
     return article;
+  });
+};
+
+exports.patchArticle = (update, article_id) => {
+  if (!update || typeof update !== "number") {
+    return Promise.reject({
+      status: 400,
+      msg: "Bad request",
+    });
+  }
+
+  let queryStr = `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *`;
+
+  return db.query(queryStr, [update, article_id]).then(({ rows }) => {
+    return rows[0];
   });
 };

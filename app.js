@@ -11,6 +11,7 @@ const {
 const {
   getArticleById,
   getArticles,
+  updateArticle,
 } = require("./controllers/articles-controller");
 const {
   getComments,
@@ -30,6 +31,8 @@ app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles/:article_id/comments", getComments);
 
 app.post("/api/articles/:article_id/comments", addComment);
+
+app.patch("/api/articles/:article_id", updateArticle);
 
 app.use(handlePsqlErrors);
 
