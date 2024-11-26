@@ -132,7 +132,7 @@ describe("GET /api/articles/:article_id/comments", () => {
             created_at: expect.any(String),
             author: expect.any(String),
             body: expect.any(String),
-            article_id: expect.any(Number),
+            article_id: 3,
           });
         });
       });
@@ -168,6 +168,115 @@ describe("GET /api/articles/:article_id/comments", () => {
   test("400: Responds with error message if given invalid input type", () => {
     return request(app)
       .get("/api/articles/dogs/comments")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+});
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201: Responds with new posted comment object", () => {
+    const newComment = {
+      username: "rogersop",
+      body: "You should probably shorten this article",
+    };
+
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body).toMatchObject({
+          comment_id: 19,
+          votes: 0,
+          created_at: expect.any(String),
+          author: "rogersop",
+          body: "You should probably shorten this article",
+          article_id: 2,
+        });
+      });
+  });
+
+  test("400: Responds with error message if given empty comment", () => {
+    const newComment = {
+      username: "rogersop",
+      body: "",
+    };
+
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Please enter a comment before posting");
+      });
+  });
+
+  test("400: Responds with error message if given empty username", () => {
+    const newComment = {
+      username: "",
+      body: "hi!",
+    };
+
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Please enter a comment before posting");
+      });
+  });
+
+  test("400: Responds with error message if given empty object", () => {
+    const newComment = {};
+
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  test("404: Responds with error message if user does not exist", () => {
+    const newComment = {
+      username: "johnregex",
+      body: "I love regex!",
+    };
+
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send(newComment)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Not found");
+      });
+  });
+
+  test("404: Responds with error message if article does not exist", () => {
+    const newComment = {
+      username: "rogersop",
+      body: "You should probably shorten this article",
+    };
+    return request(app)
+      .post("/api/articles/99999999/comments")
+      .send(newComment)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Not found");
+      });
+  });
+
+  test("400: Responds with error message if given invalid input type for article_id", () => {
+    const newComment = {
+      username: "rogersop",
+      body: "You should probably shorten this article",
+    };
+    return request(app)
+      .post("/api/articles/dogs/comments")
+      .send(newComment)
       .expect(400)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad request");
