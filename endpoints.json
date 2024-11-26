@@ -29,7 +29,7 @@
   },
   "GET /api/articles/:article_id": {
     "description": "serves a specific article object based on provided id",
-    "queries": ["any existing article_id as a number"],
+    "parameters": ["any existing article_id as a number"],
     "exampleResponse": {
       "article_id": 1,
       "title": "Living in the shadow of a great man",
@@ -43,7 +43,7 @@
   },
   "GET /api/articles/:article_id/comments": {
     "description": "serves comments for a specific article based on provided article id",
-    "queries": ["article_id"],
+    "parameters": ["article_id"],
     "exampleResponse": {
       "comments": [
         {
@@ -63,6 +63,34 @@
           "votes": 10
         }
       ]
+    }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "post a comment for a specific article based on provided article id",
+    "parameters": ["article_id", "new_comment"],
+    "exampleResponse": {
+      "comments": {
+        "comment_id": 19,
+        "votes": 0,
+        "created_at": "2020-01-15T22:21:00.000Z",
+        "author": "rogersop",
+        "body": "You should probably shorten this article",
+        "article_id": 2
+      }
+    }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "Update a comment with new votes value",
+    "parameters": ["article_id", "inc_votes"],
+    "exampleResponse": {
+      "author": "butter_bridge",
+      "title": "Living in the shadow of a great man",
+      "article_id": 1,
+      "topic": "mitch",
+      "created_at": "2020-07-09T20:11:00.000Z",
+      "votes": 90,
+      "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      "body": "I find this existence challenging"
     }
   }
 }
