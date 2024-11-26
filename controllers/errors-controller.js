@@ -6,11 +6,14 @@ exports.handleBadRequest = (err, req, res, next) => {
   }
 };
 
-exports.handleServerError = (err, req, res, next) => {
-  if (err.status && err.msg) { // This feels like custom logic as well as server error logic so this could possibly be split into 2 different handlers
+exports.handleCustomError = (err, req, res, next) => {
+  if (err.status && err.msg) {
     res.status(err.status).send({ msg: err.msg });
   } else {
-    console.log(err);
-    res.status(500).send({ msg: "Internal Server Error" });
+    next(err);
   }
+};
+
+exports.handleServerError = (err, req, res, next) => {
+  res.status(500).send({ msg: "internal server error" });
 };
