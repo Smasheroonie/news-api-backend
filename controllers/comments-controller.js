@@ -31,7 +31,7 @@ exports.addComment = (req, res, next) => {
 
   Promise.all(promises)
     .then(([_, comment]) => {
-      res.status(201).send(comment);
+      res.status(201).send({ comment });
     })
     .catch(next);
 };
