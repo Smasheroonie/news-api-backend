@@ -1,6 +1,27 @@
 const db = require("../db/connection");
 
-exports.selectArticles = () => {
+exports.selectArticles = (sort_by = "created_at", order = "desc") => {
+  const validSortBy = [
+    "created_at",
+    "author",
+    "title",
+    "article_id",
+    "topic",
+    "votes",
+    "article_img_url",
+    "comment_count",
+  ];
+
+  const validOrder = ["asc", "desc"];
+
+  if (!validSortBy.includes(sort_by)) {
+    return Promise.reject({ status: 400, msg: "Bad request" });
+  }
+
+  if (!validOrder.includes(order)) {
+    return Promise.reject({ status: 400, msg: "Bad request" });
+  }
+
   let queryStr = `SELECT 
     articles.created_at,
     articles.article_id,
@@ -15,7 +36,8 @@ exports.selectArticles = () => {
     ON
     articles.article_id = comments.article_id
     GROUP BY articles.article_id
-    ORDER BY articles.created_at DESC;`;
+    ORDER BY ${sort_by} ${order}`;
+
   return db.query(queryStr).then(({ rows }) => {
     const articles = rows;
     articles.forEach((article) => {
