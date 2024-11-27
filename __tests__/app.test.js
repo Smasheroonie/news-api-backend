@@ -6,6 +6,7 @@ const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data");
 const { string } = require("pg-format");
+const articles = require("../db/data/test-data/articles");
 
 beforeEach(() => {
   return seed(data);
@@ -118,49 +119,82 @@ describe("GET /api/articles", () => {
       });
   });
 
-  test("200: Responds with articles sorted by specified column", () => {
-    return request(app)
-      .get("/api/articles?sort_by=author")
-      .expect(200)
-      .then(({ body: { articles } }) => {
-        expect(articles).toBeSortedBy("author", { descending: true });
-      });
+  describe("Sorting and order queries", () => {
+    test("200: Responds with articles sorted by specified column", () => {
+      return request(app)
+        .get("/api/articles?sort_by=author")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toBeSortedBy("author", { descending: true });
+        });
+    });
+
+    test("200: Responds with articles in ascending order if specified", () => {
+      return request(app)
+        .get("/api/articles?order=asc")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toBeSortedBy("created_at", { descending: false });
+        });
+    });
+
+    test("200: Responds with articles sorted correctly when queries are combined", () => {
+      return request(app)
+        .get("/api/articles?sort_by=title&order=asc")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toBeSortedBy("title", { descending: false });
+        });
+    });
+
+    test("400: Responds with error message if sort_by is not relevant column", () => {
+      return request(app)
+        .get("/api/articles?sort_by=dogs")
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Bad request");
+        });
+    });
+
+    test("400: Responds with error message if order is not relevant", () => {
+      return request(app)
+        .get("/api/articles?order=dogs")
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Bad request");
+        });
+    });
   });
 
-  test("200: Responds with articles in ascending order if specified", () => {
-    return request(app)
-      .get("/api/articles?order=asc")
-      .expect(200)
-      .then(({ body: { articles } }) => {
-        expect(articles).toBeSortedBy("created_at", { descending: false });
-      });
-  });
+  describe("Filter queries", () => {
+    test("200: Responds with articles filtered by topic", () => {
+      return request(app)
+        .get("/api/articles?topic=mitch")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles.length).toBe(12);
+          articles.forEach((article) => {
+            expect(article).toMatchObject({
+              article_id: expect.any(Number),
+              title: expect.any(String),
+              topic: "mitch",
+              author: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+            });
+          });
+        });
+    });
 
-  test("200: Responds with articles sorted correctly when queries are combined", () => {
-    return request(app)
-      .get("/api/articles?sort_by=title&order=asc")
-      .expect(200)
-      .then(({ body: { articles } }) => {
-        expect(articles).toBeSortedBy("title", { descending: false });
-      });
-  });
-
-  test("400: Responds with error message if sort_by is not relevant column", () => {
-    return request(app)
-      .get("/api/articles?sort_by=dogs")
-      .expect(400)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("Bad request");
-      });
-  });
-
-  test("400: Responds with error message if order is not relevant", () => {
-    return request(app)
-      .get("/api/articles?order=dogs")
-      .expect(400)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("Bad request");
-      });
+    test("200: Responds with an empty array if topic does not exist", () => {
+      return request(app)
+        .get("/api/articles?topic=dogs")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toEqual([]);
+        });
+    });
   });
 });
 
