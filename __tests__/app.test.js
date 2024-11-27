@@ -85,6 +85,17 @@ describe("GET /api/articles/:article_id", () => {
         expect(msg).toBe("Bad request");
       });
   });
+
+  test("200: Responds with an article with comment_count", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article).toMatchObject({
+          comment_count: 11,
+        });
+      });
+  });
 });
 
 describe("GET /api/articles", () => {
