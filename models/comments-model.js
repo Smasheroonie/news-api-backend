@@ -10,7 +10,12 @@ exports.selectComments = (article_id) => {
 };
 
 exports.postComment = (username, body, article_id) => {
-  if (!username || !body || typeof username !== "string" || typeof body !== "string") {
+  if (
+    !username ||
+    !body ||
+    typeof username !== "string" ||
+    typeof body !== "string"
+  ) {
     return Promise.reject({
       status: 400,
       msg: "Bad request",
@@ -24,4 +29,10 @@ exports.postComment = (username, body, article_id) => {
     const comment = rows[0];
     return comment;
   });
+};
+
+exports.deleteComment = (comment_id) => {
+  let queryStr = `DELETE FROM comments WHERE comment_id = $1`;
+
+  return db.query(queryStr, [comment_id]);
 };

@@ -1,18 +1,5 @@
 const db = require("../db/connection");
 
-exports.checkArticleExists = (article_id) => {
-  let queryStr = `SELECT * FROM articles WHERE article_id = $1`;
-
-  return db.query(queryStr, [article_id]).then(({ rows }) => {
-    if (!rows.length) {
-      return Promise.reject({
-        status: 404,
-        msg: `Article not found`,
-      });
-    }
-  });
-};
-
 exports.selectArticles = () => {
   let queryStr = `SELECT 
     articles.created_at,
