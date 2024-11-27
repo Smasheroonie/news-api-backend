@@ -92,5 +92,19 @@
       "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
       "body": "I find this existence challenging"
     }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "Delete specified comment",
+    "parameters": ["comment_id"]
+  },
+  "GET /api/users": {
+    "description": "servers an array of all users",
+    "exampleResponse": [
+      {
+        "username": "coderdave",
+        "name": "david",
+        "avatar_url": "https://www.pngkit.com/png/full/326-3269436_haha-yes-really-really-like-this-image-hedgehog.png"
+      }
+    ]
   }
 }
