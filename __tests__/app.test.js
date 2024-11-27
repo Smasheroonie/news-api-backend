@@ -277,8 +277,8 @@ describe("POST /api/articles/:article_id/comments", () => {
       .post("/api/articles/2/comments")
       .send(newComment)
       .expect(201)
-      .then(({ body }) => {
-        expect(body).toMatchObject({
+      .then(({ body: { comment } }) => {
+        expect(comment).toMatchObject({
           comment_id: 19,
           votes: 0,
           created_at: expect.any(String),
