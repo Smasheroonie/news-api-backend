@@ -1,9 +1,9 @@
 const {
   selectArticleById,
   selectArticles,
-  checkArticleExists,
   patchArticle,
 } = require("../models/articles-model");
+const { checkRowExists } = require("../models/checker-model");
 
 exports.getArticles = (req, res, next) => {
   selectArticles()
@@ -17,7 +17,7 @@ exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params;
 
   const promises = [
-    checkArticleExists(article_id),
+    checkRowExists("articles", "article_id", article_id),
     selectArticleById(article_id),
   ];
 
@@ -33,7 +33,7 @@ exports.updateArticle = (req, res, next) => {
   const { article_id } = req.params;
 
   const promises = [
-    checkArticleExists(article_id),
+    checkRowExists("articles", "article_id", article_id),
     patchArticle(inc_votes, article_id),
   ];
 

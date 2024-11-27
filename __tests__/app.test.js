@@ -71,7 +71,7 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/99999999")
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("Article not found");
+        expect(msg).toBe("Not found");
       });
   });
 
@@ -161,7 +161,7 @@ describe("GET /api/articles/:article_id/comments", () => {
       .get("/api/articles/99999999/comments")
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("Article not found");
+        expect(msg).toBe("Not found");
       });
   });
 
@@ -295,7 +295,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       .send(newComment)
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("Article not found");
+        expect(msg).toBe("Not found");
       });
   });
 
@@ -403,7 +403,36 @@ describe("PATCH /api/articles/:article_id", () => {
       .send(update)
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("Article not found");
+        expect(msg).toBe("Not found");
+      });
+  });
+});
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: Deletes entry and responds with no content", () => {
+    return request(app)
+      .delete("/api/comments/1")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body).toEqual({});
+      });
+  });
+
+  test("400: Responds with error message if given invalid id type", () => {
+    return request(app)
+      .delete("/api/comments/dog")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  test("404: Responds with error message if article id not found", () => {
+    return request(app)
+      .delete("/api/comments/999999")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Not found");
       });
   });
 });
