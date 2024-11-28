@@ -8,8 +8,14 @@ const { checkRowExists } = require("../models/checker-model");
 exports.getArticles = (req, res, next) => {
   const { sort_by, order, topic } = req.query;
 
-  selectArticles(sort_by, order, topic)
-    .then((articles) => {
+  const promises = [selectArticles(sort_by, order, topic)];
+
+  if (topic) {
+    promises.push(checkRowExists("topics", "slug", topic));
+  }
+
+  Promise.all(promises)
+    .then(([articles]) => {
       res.status(200).send({ articles });
     })
     .catch(next);

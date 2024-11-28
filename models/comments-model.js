@@ -36,3 +36,18 @@ exports.deleteComment = (comment_id) => {
 
   return db.query(queryStr, [comment_id]);
 };
+
+exports.patchComment = (update, comment_id) => {
+  if (!update || typeof update !== "number") {
+    return Promise.reject({
+      status: 400,
+      msg: "Bad request",
+    });
+  }
+
+  let queryStr = `UPDATE comments SET votes = votes + $1 WHERE comment_id = $2 RETURNING *`;
+
+  return db.query(queryStr, [update, comment_id]).then(({ rows }) => {
+    return rows[0];
+  });
+};

@@ -3,6 +3,7 @@ const {
   selectComments,
   postComment,
   deleteComment,
+  patchComment,
 } = require("../models/comments-model");
 
 exports.getComments = (req, res, next) => {
@@ -47,6 +48,22 @@ exports.removeComment = (req, res, next) => {
     .then(() => {
       res.status(204);
       res.send();
+    })
+    .catch(next);
+};
+
+exports.updateComment = (req, res, next) => {
+  const { comment_id } = req.params;
+  const { inc_votes } = req.body;
+
+  const promises = [
+    checkRowExists("comments", "comment_id", comment_id),
+    patchComment(inc_votes, comment_id),
+  ];
+
+  Promise.all(promises)
+    .then(([_, comment]) => {
+      res.status(200).send({ comment });
     })
     .catch(next);
 };
