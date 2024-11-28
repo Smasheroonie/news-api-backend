@@ -38,7 +38,8 @@
       "body": "I find this existence challenging",
       "created_at": "2020-07-09T20:11:00.000Z",
       "votes": 100,
-      "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+      "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      "comment_count": 1
     }
   },
   "GET /api/articles/:article_id/comments": {
@@ -67,7 +68,7 @@
   },
   "POST /api/articles/:article_id/comments": {
     "description": "post a comment for a specific article based on provided article id",
-    "parameters": ["article_id", "new_comment"],
+    "parameters": ["article_id", { "inc_votes": "newVote" }],
     "exampleResponse": {
       "comments": {
         "comment_id": 19,
@@ -96,6 +97,18 @@
   "DELETE /api/comments/:comment_id": {
     "description": "Delete specified comment",
     "parameters": ["comment_id"]
+  },
+  "PATCH /api/comments/:comment_id": {
+    "description": "update the votes on a given comment",
+    "parameters": [{ "inc_votes": "newVote" }],
+    "exampleResponse": {
+      "comment_id": 19,
+      "votes": 1,
+      "created_at": "2020-01-15T22:21:00.000Z",
+      "author": "rogersop",
+      "body": "You should probably shorten this article",
+      "article_id": 2
+    }
   },
   "GET /api/users": {
     "description": "serves an array of all users",
