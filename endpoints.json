@@ -29,7 +29,7 @@
   },
   "GET /api/articles/:article_id": {
     "description": "serves a specific article object based on provided id",
-    "parameters": ["any existing article_id as a number"],
+    "parameters": ["article_id"],
     "exampleResponse": {
       "article_id": 1,
       "title": "Living in the shadow of a great man",
@@ -98,7 +98,7 @@
     "parameters": ["comment_id"]
   },
   "GET /api/users": {
-    "description": "servers an array of all users",
+    "description": "serves an array of all users",
     "exampleResponse": [
       {
         "username": "coderdave",
@@ -106,5 +106,14 @@
         "avatar_url": "https://www.pngkit.com/png/full/326-3269436_haha-yes-really-really-like-this-image-hedgehog.png"
       }
     ]
+  },
+  "GET /api/users/:username": {
+    "description": "serves information of specified user",
+    "parameters": ["username"],
+    "exampleResponse": {
+      "username": "lurker",
+      "name": "do_nothing",
+      "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
+    }
   }
 }
