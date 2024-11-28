@@ -131,9 +131,59 @@ describe("Articles", () => {
         });
     });
 
-    describe('POST /api/articles', () => {
-      test('200: ', () => {
-        
+    describe("POST /api/articles", () => {
+      test("200: Responds with newly posted article", () => {
+        const newArticle = {
+          author: "rogersop",
+          title: "My favourite coding characters",
+          body: 'There are many characters in popular media with the persona of "hacker", but the best ones up for debate. Be they villains or heroes, the hacker is usually seen as cool and enigmatic. My top 2 have to be Neo from the Matrix and Dennis Nedry from Jurassic Park (who is decidedly not cool). Also Mitch if he was in a film.',
+          topic: "mitch",
+          article_img_url:
+            "https://static.wikia.nocookie.net/matrix/images/6/6d/1682-neo-mr-anderson.jpg/revision/latest?cb=20181020221058",
+        };
+
+        return request(app)
+          .post("/api/articles")
+          .send(newArticle)
+          .expect(201)
+          .then(({ body: { article } }) => {
+            expect(article).toMatchObject({
+              article_id: 14,
+              author: "rogersop",
+              title: "My favourite coding characters",
+              body: 'There are many characters in popular media with the persona of "hacker", but the best ones up for debate. Be they villains or heroes, the hacker is usually seen as cool and enigmatic. My top 2 have to be Neo from the Matrix and Dennis Nedry from Jurassic Park (who is decidedly not cool). Also Mitch if he was in a film.',
+              topic: "mitch",
+              votes: 0,
+              created_at: expect.any(String),
+              comment_count: 0,
+            });
+          });
+      });
+
+      test("200: Responds with newly posted article if not given img url", () => {
+        const newArticle = {
+          author: "rogersop",
+          title: "My favourite coding characters",
+          body: 'There are many characters in popular media with the persona of "hacker", but the best ones up for debate. Be they villains or heroes, the hacker is usually seen as cool and enigmatic. My top 2 have to be Neo from the Matrix and Dennis Nedry from Jurassic Park (who is decidedly not cool). Also Mitch if he was in a film.',
+          topic: "mitch",
+        };
+
+        return request(app)
+          .post("/api/articles")
+          .send(newArticle)
+          .expect(201)
+          .then(({ body: { article } }) => {
+            expect(article).toMatchObject({
+              article_id: 14,
+              author: "rogersop",
+              title: "My favourite coding characters",
+              body: 'There are many characters in popular media with the persona of "hacker", but the best ones up for debate. Be they villains or heroes, the hacker is usually seen as cool and enigmatic. My top 2 have to be Neo from the Matrix and Dennis Nedry from Jurassic Park (who is decidedly not cool). Also Mitch if he was in a film.',
+              topic: "mitch",
+              votes: 0,
+              created_at: expect.any(String),
+              comment_count: 0,
+            });
+          });
       });
     });
 

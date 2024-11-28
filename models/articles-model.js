@@ -17,7 +17,7 @@ exports.selectArticles = (sort_by = "created_at", order = "desc", topic) => {
   if (!validSortBy.includes(sort_by) || !validOrder.includes(order)) {
     return Promise.reject({ status: 400, msg: "Bad request" });
   }
-  
+
   const queryValues = [];
 
   let queryStr = `SELECT 
@@ -90,4 +90,36 @@ exports.patchArticle = (update, article_id) => {
   return db.query(queryStr, [update, article_id]).then(({ rows }) => {
     return rows[0];
   });
+};
+
+exports.postArticle = (author, title, body, topic, article_img_url = "") => {
+  if (
+    !author ||
+    !title ||
+    !body ||
+    !topic ||
+    typeof author !== "string" ||
+    typeof title !== "string" ||
+    typeof body !== "string" ||
+    typeof topic !== "string"
+  ) {
+    
+    return Promise.reject({
+      status: 400,
+      msg: "Bad request",
+    });
+  }
+
+  let queryStr = `
+  INSERT INTO articles
+  (author, title, body, topic, article_img_url) 
+  VALUES ($1, $2, $3, $4, $5) 
+  RETURNING *, 0 AS comment_count`;
+
+  return db
+    .query(queryStr, [author, title, body, topic, article_img_url])
+    .then(({ rows }) => {
+      const article = rows[0];
+      return article;
+    });
 };

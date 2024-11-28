@@ -2,6 +2,7 @@ const {
   selectArticleById,
   selectArticles,
   patchArticle,
+  postArticle
 } = require("../models/articles-model");
 const { checkRowExists } = require("../models/checker-model");
 
@@ -48,6 +49,16 @@ exports.updateArticle = (req, res, next) => {
   Promise.all(promises)
     .then(([_, article]) => {
       res.status(200).send({ article });
+    })
+    .catch(next);
+};
+
+exports.addArticle = (req, res, next) => {
+  const { author, title, body, topic, article_img_url } = req.body;
+
+  postArticle(author, title, body, topic, article_img_url)
+    .then((article) => {
+      res.status(201).send({ article });
     })
     .catch(next);
 };
