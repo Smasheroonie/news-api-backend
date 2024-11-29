@@ -53,14 +53,7 @@ exports.selectArticles = (sort_by = "created_at", order = "desc", topic) => {
 
 exports.selectArticleById = (article_id) => {
   let queryStr = `SELECT 
-    articles.created_at,
-    articles.article_id,
-    articles.author,
-    articles.title,
-    articles.topic,
-    articles.votes,
-    articles.body,
-    articles.article_img_url,
+    articles.*,
     COUNT(comments.article_id) AS comment_count
     FROM articles
     LEFT JOIN comments
