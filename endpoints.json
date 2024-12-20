@@ -80,8 +80,25 @@
       }
     }
   },
+  "POST /api/articles": {
+    "description": "post a comment for a specific article based on provided article id",
+    "parameters": ["author, title, body, topic, article_img_url (optional)"],
+    "exampleResponse": {
+      "comments": {
+        "comment_count": 0,
+        "title": "Why I love tests",
+        "topic": "coding",
+        "votes": 0,
+        "created_at": "2022-01-15T22:21:00.000Z",
+        "author": "rogersop",
+        "body": "They really do be testing",
+        "article_id": 99,
+        "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+      }
+    }
+  },
   "PATCH /api/articles/:article_id": {
-    "description": "Update a comment with new votes value",
+    "description": "Update an article with new votes value",
     "parameters": ["article_id", "inc_votes"],
     "exampleResponse": {
       "author": "butter_bridge",

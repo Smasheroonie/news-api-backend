@@ -2,7 +2,7 @@ const {
   selectArticleById,
   selectArticles,
   patchArticle,
-  postArticle
+  postArticle,
 } = require("../models/articles-model");
 const { checkRowExists } = require("../models/checker-model");
 
