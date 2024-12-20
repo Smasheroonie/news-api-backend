@@ -3,6 +3,7 @@ const {
   selectArticles,
   patchArticle,
   postArticle,
+  deleteArticle,
 } = require("../models/articles-model");
 const { checkRowExists } = require("../models/checker-model");
 
@@ -59,6 +60,21 @@ exports.addArticle = (req, res, next) => {
   postArticle(author, title, body, topic, article_img_url)
     .then((article) => {
       res.status(201).send({ article });
+    })
+    .catch(next);
+};
+
+exports.removeArticle = (req, res, next) => {
+  const { article_id } = req.params;
+  const promises = [
+    checkRowExists("articles", "article_id", article_id),
+    deleteArticle(article_id),
+  ];
+
+  Promise.all(promises)
+    .then(() => {
+      res.status(204);
+      res.send();
     })
     .catch(next);
 };

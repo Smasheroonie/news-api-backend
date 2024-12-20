@@ -551,6 +551,35 @@ describe("Articles", () => {
         });
     });
   });
+
+  describe.only("DELETE /api/articles/:article_id", () => {
+    test("204: Deletes article and responds with no content", () => {
+      return request(app)
+        .delete("/api/articles/4")
+        .expect(204)
+        .then(({ body }) => {
+          expect(body).toEqual({});
+        });
+    });
+
+    test("400: Responds with error message if given invalid id type", () => {
+      return request(app)
+        .delete("/api/articles/dog")
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Bad request");
+        });
+    });
+
+    test("404: Responds with error message if article id not found", () => {
+      return request(app)
+        .delete("/api/articles/999999")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Not found");
+        });
+    });
+  });
 });
 
 describe("Comments", () => {
