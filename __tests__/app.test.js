@@ -314,7 +314,7 @@ describe("Articles", () => {
     });
   });
 
-  describe.only("POST /api/articles", () => {
+  describe("POST /api/articles", () => {
     test("201: Responds with newly posted article", () => {
       const newArticle = {
         author: "rogersop",
