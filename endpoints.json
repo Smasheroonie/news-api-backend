@@ -111,6 +111,10 @@
       "body": "I find this existence challenging"
     }
   },
+  "DELETE /api/articles/:article_id": {
+    "description": "Delete specified article",
+    "parameters": ["article_id"]
+  },
   "DELETE /api/comments/:comment_id": {
     "description": "Delete specified comment",
     "parameters": ["comment_id"]

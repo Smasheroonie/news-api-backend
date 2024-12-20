@@ -552,7 +552,7 @@ describe("Articles", () => {
     });
   });
 
-  describe.only("DELETE /api/articles/:article_id", () => {
+  describe("DELETE /api/articles/:article_id", () => {
     test("204: Deletes article and responds with no content", () => {
       return request(app)
         .delete("/api/articles/4")
