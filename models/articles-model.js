@@ -96,7 +96,6 @@ exports.postArticle = (author, title, body, topic, article_img_url = "") => {
     typeof body !== "string" ||
     typeof topic !== "string"
   ) {
-    
     return Promise.reject({
       status: 400,
       msg: "Bad request",
@@ -115,4 +114,10 @@ exports.postArticle = (author, title, body, topic, article_img_url = "") => {
       const article = rows[0];
       return article;
     });
+};
+
+exports.deleteArticle = (article_id) => {
+  let queryStr = `DELETE FROM articles WHERE article_id = $1`;
+
+  return db.query(queryStr, [article_id]);
 };
