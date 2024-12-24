@@ -25,8 +25,8 @@ The front end part of this project can be found [here.](https://github.com/Smash
 
 To clone the repository, start by clicking "Code" at the top of this page and copy the given URL. Then enter the following in your terminal:
 
-```
-git clone <copied-URL>
+``` Bash
+git clone https://github.com/Smasheroonie/news-api-backend.git
 code news-api-backend
 ```
 This will clone and open the new folder in VS Code.
@@ -37,25 +37,25 @@ Create two new files called .env.test and .env.development in the root folder of
 PGDATABASE=nc_news_test
 ```
 ```
-/// .env.development
+// .env.development
 PGDATABASE=nc_news
 ```
 
 Open your terminal in VS Code and run the following commands:
 
-```
+``` Bash
 npm install
 ```
 
 You should now be able to run the following commands in order to start your database and seed it with the data:
 
-```
+``` Bash
 npm run setup-dbs
 npm run seed
 ```
 Finally, you can run tests:
 
-```
+``` Bash
 npm test app
 ```
 
