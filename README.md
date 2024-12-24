@@ -43,19 +43,19 @@ PGDATABASE=nc_news
 
 Open your terminal in VS Code and run the following commands:
 
-``` Bash
+``` NPL
 npm install
 ```
 
 You should now be able to run the following commands in order to start your database and seed it with the data:
 
-``` Bash
+``` NPL
 npm run setup-dbs
 npm run seed
 ```
 Finally, you can run tests:
 
-``` Bash
+``` NPL
 npm test app
 ```
 
