@@ -14,6 +14,8 @@ This project has the following features:
 
 The hosted version of this project can be found [here.](https://nc-news-dd8e.onrender.com/api)
 
+The front end part of this project can be found [here.](https://github.com/Smasheroonie/nc-news-frontend)
+
 ## Requirements:
 
 * Node.js version v22.9.0 or later.
