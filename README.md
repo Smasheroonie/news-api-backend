@@ -18,7 +18,7 @@ The front end part of this project can be found [here.](https://github.com/Smash
 
 ## Requirements
 
-* Node.js version v22.9.0 or later.
+* Node.js version v22.9.0 or later
 * PostgreSQL 16.4
 
 ## Setup
